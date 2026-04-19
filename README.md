@@ -189,3 +189,8 @@ Each environment's `configs/{env}_ph_lowdim.yaml` has sections for:
 - **Shortcut rollouts** at eval time plan through the graph (Dijkstra on CMD
   distance), then either roll out the edge policies live or (default)
   retry each edge stochastically up to `max_retries` times before giving up.
+
+
+Disclaimer: AI-assisted tools (Claude and ChatGPT) were used during this work
+for coding assistance, debugging, and generating diagrams. All experimental design,
+analysis, interpretation, and writing are our own.
