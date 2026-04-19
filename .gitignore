@@ -1,0 +1,10 @@
+*.ipynb
+*.mp4
+*.out
+*.png
+experiments/outputs/*
+*.pyc
+*.TXT
+*.png
+*.gif
+outputs/*

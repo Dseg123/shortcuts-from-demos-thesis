@@ -1,0 +1,108 @@
+dataset:
+  # path: /scratch/gpfs/TSILVER/de7281/robomimic/lift/ph/low_dim_v15.hdf5
+  # obs_keys:
+  path: null
+  obs_keys:
+    - robot0_eef_pos
+    - robot0_eef_quat
+    - robot0_gripper_qpos
+    - object
+
+env:
+  eps: 1.0
+  max_lookup_pairs: 500
+  camera_name: agentview
+  render_height: 256
+  render_width: 256
+
+# All fields here map directly onto LearningSystemConfig.
+# num_steps and log_every are extra (handled in pipeline.py, not the dataclass).
+learning_system:
+  # Architecture
+  latent_dim: 16
+  obs_enc_dim: 64
+  action_embed_dim: 8
+  hidden_dims: [64, 64]
+  actor_hidden_dims: [64, 64]
+  normalize_embeddings: true
+
+  # Optimiser
+  critic_lr: 3e-4
+  actor_lr: 1e-4
+  grad_clip: 1.0
+
+  # CRTR sampling
+  batch_size: 16
+  repetition_factor: 2
+  gamma: 0.99
+
+  # Actor loss weights
+  crl_weight: 1
+  bc_weight: 0
+  entropy_weight: 0
+
+  # Device
+  device: cpu
+
+  # Training loop (pipeline.py extras)
+  num_steps: 2
+  log_every: 5
+
+eval:
+  num_rollouts: 2
+  max_steps: 20
+
+perceiver:
+  K: 3
+  max_obs: 100
+  num_rollouts: 1
+  max_steps: 20
+  success_threshold: 0.5
+online_system:
+  # CRTR
+  batch_size: 16
+  repetition_factor: 2
+  gamma: 0.99
+  # Loss
+  crl_weight: 1.0
+  entropy_weight: 0.0
+  # Optimizers
+  critic_lr: 3e-4
+  actor_lr: 1e-4
+  grad_clip: 1.0
+  # Episode collection
+  max_steps: 20
+  collect_per_step: 2
+  # Replay buffer
+  buffer_size: 500
+  # Distance estimation
+  dist_scale: 1.0
+  auto_dist_scale: false
+  dist_quantile: 1.0
+  gain_samples: 5
+  # Graph expansion
+  edge_window_size: 3
+  edge_success_threshold: 0.8
+  # Sampling
+  sampling_method: uniform
+  ucb_beta: 1.0
+  gain_update_frequency: 5
+  # Residual actor
+  residualize: false
+  # Training loop
+  num_steps: 2
+  log_every: 1
+  # Device
+  device: cpu
+
+online_eval:
+  render: true
+  num_rollouts: 2
+  max_edge_steps: 20
+  replay_mode: live
+  rollout_method: retries
+  max_retries: 10
+  eval_every: 5
+
+offline_dir: ???
+resume: false

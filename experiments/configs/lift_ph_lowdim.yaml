@@ -1,0 +1,109 @@
+dataset:
+  path: /scratch/gpfs/TSILVER/de7281/robomimic/lift/ph/low_dim_v15.hdf5
+  obs_keys:
+    - robot0_eef_pos
+    - robot0_eef_quat
+    - robot0_gripper_qpos
+    - robot0_gripper_qvel
+    - robot0_joint_pos
+    - robot0_joint_vel
+    - object
+
+env:
+  eps: 0.5
+  max_lookup_pairs: 5000
+  camera_name: agentview
+  render_height: 256
+  render_width: 256
+
+learning_system:
+  # Architecture
+  latent_dim: 64
+  obs_enc_dim: 128
+  action_embed_dim: 16
+  hidden_dims: [128, 128]
+  actor_hidden_dims: [128, 128]
+  normalize_embeddings: true
+
+  # Optimiser
+  critic_lr: 3e-4
+  actor_lr: 1e-4
+  grad_clip: 1.0
+
+  # CRTR sampling
+  batch_size: 64
+  repetition_factor: 4
+  gamma: 0.99
+
+  # Actor loss weights
+  crl_weight: 0.8
+  bc_weight: 0.2
+  entropy_weight: 0
+
+  # Device
+  device: cuda
+
+  # Training loop
+  num_steps: 100000
+  log_every: 500
+
+  load_from: null
+
+eval:
+  num_rollouts: 20
+  max_steps: 200
+
+perceiver:
+  K: 9
+  max_obs: 10000
+  num_rollouts: 10
+  max_steps: 200
+  success_threshold: 0.8
+online_system:
+  # CRTR
+  batch_size: 64
+  repetition_factor: 4
+  gamma: 0.99
+  # Loss
+  crl_weight: 1.0
+  entropy_weight: 0.01
+  # Optimizers
+  critic_lr: 3e-4
+  actor_lr: 1e-4
+  grad_clip: 1.0
+  # Episode collection
+  max_steps: 200
+  collect_per_step: 4
+  # Replay buffer
+  buffer_size: 10000
+  # Distance estimation
+  dist_scale: 1.0
+  auto_dist_scale: true
+  dist_quantile: 1.0
+  gain_samples: 50
+  # Graph expansion
+  edge_window_size: 10
+  edge_success_threshold: 0.9
+  # Sampling
+  sampling_method: stochastic_ucb
+  ucb_beta: 1.0
+  gain_update_frequency: 10
+  # Residual actor
+  residualize: false
+  # Training loop
+  num_steps: 10000
+  log_every: 100
+  # Device
+  device: cuda
+
+online_eval:
+  render: true
+  num_rollouts: 20
+  max_edge_steps: 200
+  replay_mode: cached
+  rollout_method: basic
+  max_retries: 10
+  eval_every: 500
+
+offline_dir: ???
+resume: false
