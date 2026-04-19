@@ -1,4 +1,4 @@
-# shortcuts_from_demos
+# Contrastive TAMP: Learning Shortcuts from Demonstrations
 
 Thesis project on learning TAMP-style graph structure and shortcut edges from
 robotic-manipulation demonstrations.
